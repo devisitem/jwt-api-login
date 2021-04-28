@@ -30,7 +30,7 @@ public class UserController {
 
         //create Token
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userName,userPassword);
-
+        System.out.println("token = " + token);
         //Create Authentication via AuthenticationManager
         Authentication authentication = authenticationManager.authenticate(token);
 

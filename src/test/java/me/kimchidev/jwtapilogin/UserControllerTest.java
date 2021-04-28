@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -31,8 +32,18 @@ class UserControllerTest {
     public void login () throws Exception {
         mockMvc.perform(post("/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRepository.createUser())))
+                .content(objectMapper.writeValueAsString(createUser())))
 
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().isOk());
+
+
+    }
+
+    public static AuthenticationRequest createUser(){
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setUserId("tgjeon");
+        request.setPassword("password486");
+        return request;
     }
 }

@@ -11,7 +11,7 @@ public class AuthenticationToken {
 
     private String userId;
     private Collection authorities;
-    private  String token;
+    private String token;
 
     public AuthenticationToken(String userId, Collection collection, String token) {
         this.userId = userId;

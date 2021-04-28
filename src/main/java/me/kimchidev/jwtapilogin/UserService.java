@@ -13,6 +13,5 @@ import java.util.Collection;
 public interface UserService extends UserDetailsService {
     Collection<GrantedAuthority> getAuthorities(String userId);
     public Account findUser(String userId);
-    public PasswordEncoder passwordEncoder();
 
 }

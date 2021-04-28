@@ -14,16 +14,15 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class UserRepository implements UserService {
 
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Collection<GrantedAuthority> getAuthorities(String userId) {
         List<GrantedAuthority> string_authorities = new ArrayList<>();
-
+        System.out.println("UserRepository.getAuthorities");
         if(userId.equals("tgjeon")){
+            System.out.println("UserRepository.getAuthorities : 권한부여");
             string_authorities.add(new SimpleGrantedAuthority("USER"));
             string_authorities.add(new SimpleGrantedAuthority("ADMIN"));
         }
@@ -36,17 +35,15 @@ public class UserRepository implements UserService {
         return createUser();
     }
 
-    @Override
-    public PasswordEncoder passwordEncoder() {
-        return this.passwordEncoder;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Account user = createUser();
+        System.out.println("user = " + user);
         if(s.equals(user.getUserId())){
             user.setAuthorities(getAuthorities(user.getUserId()));
         }
+        System.out.println("user.getAuthorities() = " + user.getAuthorities());
         return user;
     }
 
