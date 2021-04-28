@@ -26,9 +26,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/user").hasAuthority("USER") //user api 유저권한
-                .antMatchers("/admin").hasAuthority("ADMIN") //admin api 관리자 권한
+                .antMatchers("/user/login").hasAuthority("USER") //user api 유저권한
+                .antMatchers("/admin/**").hasAuthority("ADMIN") //admin api 관리자 권한
                 .anyRequest().authenticated()
                 .and()
                 .logout();

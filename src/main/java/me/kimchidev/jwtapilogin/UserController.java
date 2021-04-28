@@ -25,6 +25,8 @@ public class UserController {
 
     @PostMapping("/login")
     public AuthenticationToken login(@RequestBody AuthenticationRequest authenticationRequest, HttpSession session) throws Exception{
+        System.out.println("UserController.login : request");
+
         String userName = authenticationRequest.getUserId();
         String userPassword = authenticationRequest.getPassword();
 
