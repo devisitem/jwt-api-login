@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,12 +23,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .cors().and()
+        http    .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user/login").hasAuthority("USER") //user api 유저권한
-                .antMatchers("/admin/**").hasAuthority("ADMIN") //admin api 관리자 권한
+                .antMatchers("/user/login").permitAll()
+                .antMatchers(HttpMethod.GET,"/user").hasAuthority("USER") //user api 유저권한
+                .antMatchers("/admin/*").hasAuthority("ADMIN") //admin api 관리자 권한
                 .anyRequest().authenticated()
                 .and()
                 .logout();
@@ -35,8 +36,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        System.out.println("WebSecurityConfig.configure Build Manager");
         auth.userDetailsService(userService)
                 .passwordEncoder(passwordEncoder());
+        /*auth.inMemoryAuthentication()
+                .withUser("tgjeon").password(passwordEncoder().encode("password486"))
+                .authorities("USER","ADMIN");*/
     }
 
     @Bean
@@ -44,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
 
 
     @Bean

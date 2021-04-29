@@ -1,54 +1,41 @@
 package me.kimchidev.jwtapilogin;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Repository
-public class UserRepository implements UserService {
+@RequiredArgsConstructor
+public class UserRepository{
 
+    @PersistenceContext
+    private final EntityManager entityManager;
 
-    @Override
-    public Collection<GrantedAuthority> getAuthorities(String userId) {
-        List<GrantedAuthority> string_authorities = new ArrayList<>();
-        System.out.println("UserRepository.getAuthorities");
-        if(userId.equals("tgjeon")){
-            System.out.println("UserRepository.getAuthorities : 권한부여");
-            string_authorities.add(new SimpleGrantedAuthority("USER"));
-            string_authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        }
-
-        return string_authorities;
+    public void save(Account account){
+        entityManager.persist(account);
     }
 
-    @Override
-    public Account findUser(String userId) {
-        return createUser();
+    public Account findOne(Long id){
+        return entityManager.find(Account.class,id);
+    }
+
+    public Account findById(String userId){
+        return entityManager.createQuery("select a from Account a where a.userId = :userId",Account.class)
+                .setParameter("userId",userId)
+                .getSingleResult();
     }
 
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Account user = createUser();
-        System.out.println("user = " + user);
-        if(s.equals(user.getUserId())){
-            user.setAuthorities(getAuthorities(user.getUserId()));
-        }
-        System.out.println("user.getAuthorities() = " + user.getAuthorities());
-        return user;
-    }
-
-    public static Account createUser(){
-        Account account = Account.builder()
-                .userId("tgjeon")
-                .password("password486")
-                .build();
-        return account;
-    }
 }

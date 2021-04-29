@@ -10,6 +10,7 @@ import java.util.Collection;
 
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account implements UserDetails {
     @Id @GeneratedValue
@@ -30,8 +31,14 @@ public class Account implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        System.out.println("Account.getAuthorities 조회 id = "+this.userId);
         return authorities;
     }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities){
+        this.authorities = authorities;
+    }
+
 
     @Override
     public String getUsername() {
@@ -39,23 +46,21 @@ public class Account implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
-    }
-
-    @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        System.out.println("Account.isAccountNonLocked");
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        System.out.println("Account.isEnabled");
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        System.out.println("Account.isAccountNonExpired");
+        return true;
     }
 
     @Builder

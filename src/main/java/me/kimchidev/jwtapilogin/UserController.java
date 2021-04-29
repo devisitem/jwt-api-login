@@ -29,20 +29,23 @@ public class UserController {
 
         String userName = authenticationRequest.getUserId();
         String userPassword = authenticationRequest.getPassword();
-
         //create Token
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userName,userPassword);
-        System.out.println("token = " + token);
+        System.out.println("[### UserController ###] : token = " + token);
+
         //Create Authentication via AuthenticationManager
         Authentication authentication = authenticationManager.authenticate(token);
+        System.out.println("[### UserController ###] : authentication = " + authentication);
 
         //apply Authentication in SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        System.out.println("[### UserController ###] : SecurityContextHolder.getContext() = " + SecurityContextHolder.getContext());
+        
         //Add Context into Session
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,SecurityContextHolder.getContext());
+        Account user = userService.findOne(userName);
 
-        Account user = userService.findUser(userName);
+        System.out.println("[### UserController ###] : user.getAuthorities() = " + user.getAuthorities());
         return new AuthenticationToken(user.getUserId(), user.getAuthorities(), session.getId());
     }
 

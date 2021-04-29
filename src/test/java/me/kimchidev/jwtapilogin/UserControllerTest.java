@@ -39,11 +39,11 @@ class UserControllerTest {
 
 
     }
-
     public static AuthenticationRequest createUser(){
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUserId("tgjeon");
         request.setPassword("password486");
         return request;
     }
+
 }
